@@ -12,9 +12,8 @@ import java.util.Scanner;
 
 public class ConsolaComandos {
 
-    private File directoryActual;
+    private File directoryActual = new File(this.getClass().getSimpleName());
     private File directoryNuevo;
-
     public String Mdkir(String nombre) {
         StringBuilder mensaje = new StringBuilder();
         File newFolder = new File(directoryActual, nombre);
@@ -29,6 +28,10 @@ public class ConsolaComandos {
         }
     }
 
+    public String getPath(){
+        return directoryActual.getAbsolutePath();
+    }
+    
     public String Mfile(String nombre) throws IOException {
         StringBuilder mensaje = new StringBuilder();
         File newFile = new File(directoryActual, nombre);

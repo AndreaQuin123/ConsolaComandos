@@ -21,8 +21,10 @@ public class Swing_CMD extends javax.swing.JFrame {
         mensaje.append("\n=====================================\n");
         mensaje.append("BIENVENIDO AL CMD DE WINDOWS. SI DESEA VER LOS COMANDOS DISPONIBLES, POR FAVOR ESCRIBIR ' ver comandos ' . ");
         mensaje.append("\n=====================================\n");
-
+        mensaje.append(mf.getPath());
+        mensaje.append(" > ");
         Consola.setText(mensaje.toString());
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -78,7 +80,7 @@ public class Swing_CMD extends javax.swing.JFrame {
     private void ConsolaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ConsolaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String fullText = Consola.getText().trim();
-            int lastNewLineIndex = fullText.lastIndexOf("\n");
+            int lastNewLineIndex = fullText.lastIndexOf("> ");
 
             if (lastNewLineIndex != -1) {
                 String lastLine = fullText.substring(lastNewLineIndex + 1).trim();
