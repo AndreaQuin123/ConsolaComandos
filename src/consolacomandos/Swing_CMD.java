@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 public class Swing_CMD extends javax.swing.JFrame {
 
     ConsolaComandos mf = new ConsolaComandos();
+    private boolean usuarioEscribiendo = false;
+    private StringBuilder contenidoEscribir = new StringBuilder();
+    String nombre = "";
 
     public Swing_CMD(ConsolaComandos comando) {
         mf = comando != null ? comando : new ConsolaComandos();
@@ -88,16 +91,16 @@ public class Swing_CMD extends javax.swing.JFrame {
                 comando = lastLine;
 
                 if (comando.startsWith("ver comandos")) {
-                    Consola.append("\nComandos disponibles:\n1. Mdkir\n2. Mfile\n3. Rm\n4. Cd\n5. Dir\n6. Date\n7. Time\n8. Escribir\n9. Leer\n");
+                    Consola.append("\nComandos disponibles:\n1. Mkdir\n2. Mfile\n3. Rm\n4. Cd\n5. Dir\n6. Date\n7. Time\n8. wr\n9. dr\n");
                 }
 
-                if (comando.startsWith("Mdkir")) {
-                    String nombre = comando.substring(5).trim();
-                    Consola.append(mf.Mdkir(nombre));
+                if (comando.startsWith("Mkdir")) {
+                    nombre = comando.substring(5).trim();
+                    Consola.append(mf.Mkdir(nombre));
                 }
 
                 if (comando.startsWith("Mfile")) {
-                    String nombre = comando.substring(5).trim();
+                    nombre = comando.substring(5).trim();
 
                     try {
                         Consola.append(mf.Mfile(nombre));
@@ -109,12 +112,12 @@ public class Swing_CMD extends javax.swing.JFrame {
                 }
 
                 if (comando.startsWith("Rm")) {
-                    String nombre = comando.substring(2).trim();
+                    nombre = comando.substring(2).trim();
                     Consola.append(mf.Rm(nombre));
                 }
 
                 if (comando.startsWith("Cd")) {
-                    String nombre = comando.substring(2).trim();
+                    nombre = comando.substring(2).trim();
                     Consola.append(mf.Cd(nombre));
                 }
 
@@ -130,28 +133,44 @@ public class Swing_CMD extends javax.swing.JFrame {
                     Consola.append(mf.Time());
                 }
 
-                if (comando.startsWith("Escribir")) {
-                    String nombre = comando.substring(8).trim();
+                if (usuarioEscribiendo) {
 
-                    Consola.append("\nIngrese el contenido a escribir: ");
+                    fullText = Consola.getText().trim();
+                    lastNewLineIndex = fullText.lastIndexOf("\n");
+                    lastLine = fullText.substring(lastNewLineIndex + 1).trim();
+                    contenidoEscribir.append(lastLine);
 
-                    String contenido = Consola.getText().trim();
-                    lastNewLineIndex = contenido.lastIndexOf("\n");
-                    lastLine = contenido.substring(lastNewLineIndex + 1).trim();
+                    String content = contenidoEscribir.toString();
 
-                    String result = mf.Escribir(nombre, lastLine);
+                    System.out.println(nombre + content);
 
-                    Consola.append("\n" + result);
+                    String result = mf.wr(nombre, content);
 
-                    Consola.append("\n");
+                    if (result.startsWith("!ERROR!")) {
+                        Consola.append("\nError: " + result);
+                    } else {
+                        Consola.append("\nSe sobreescribio el contenido del archivo "+nombre+".\n");
+                    }
+
+                    usuarioEscribiendo = false;
+                    contenidoEscribir.setLength(0);
+
+                } else {
+                    if (comando.startsWith("wr")) {
+                        nombre = comando.substring(2).trim();
+                        Consola.append("\nIngrese el contenido a escribir: ");
+                        usuarioEscribiendo = true;
+                    }
                 }
 
-                if (comando.startsWith("Leer")) {
-                    String nombre = comando.substring(4).trim();
-                    Consola.append(mf.Leer(nombre));
+                if (comando.startsWith("rd")) {
+                    nombre = comando.substring(4).trim();
+                    Consola.append(mf.rd(nombre));
                 }
             }
 
+            Consola.append(mf.getPath());
+            Consola.append(" > ");
             Consola.setCaretPosition(Consola.getDocument().getLength());
 
         }

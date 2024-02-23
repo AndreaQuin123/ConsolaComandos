@@ -14,7 +14,7 @@ public class ConsolaComandos {
 
     private File directoryActual = new File(this.getClass().getSimpleName());
     private File directoryNuevo;
-    public String Mdkir(String nombre) {
+    public String Mkdir(String nombre) {
         StringBuilder mensaje = new StringBuilder();
         File newFolder = new File(directoryActual, nombre);
 
@@ -86,18 +86,22 @@ public class ConsolaComandos {
 
     public String Cd(String nombre) {
         StringBuilder mensaje = new StringBuilder();
-        directoryNuevo = new File(nombre);
+        if (!nombre.equals("...")) {
+            directoryNuevo = new File(directoryActual, nombre);
 
-        if (directoryNuevo.exists() && directoryNuevo.isDirectory()) {
-            directoryActual = directoryNuevo;
-            mensaje.append("\nSe cambio de dirección.\n");
-            return mensaje.toString();
+            if (directoryNuevo.exists() && directoryNuevo.isDirectory()) {
+                directoryActual = directoryNuevo;
+                mensaje.append("\nSe cambio de dirección.\n");
+                return mensaje.toString();
+            } else {
+                mensaje.append("\n !ERROR!: no se encontro la nueva dirección.\n");
+                return mensaje.toString();
+
+            }
         } else {
-            mensaje.append("\n !ERROR!: no se encontro la nueva dirección.\n");
+            directoryActual = new File(directoryActual.getParent());
             return mensaje.toString();
-
         }
-
     }
 
     public String info(File file) {
@@ -111,13 +115,13 @@ public class ConsolaComandos {
             mensaje.append("\nULTIMA MODIF: " + new Date(file.lastModified()));
 
             if (file.isFile()) {
-                mensaje.append("\nES UN ARCHIVO.");
+                mensaje.append("\nES UN ARCHIVO.\n");
             } else if (file.isDirectory()) {
-                mensaje.append("\nES UN FOLDER.");
+                mensaje.append("\nES UN FOLDER.\n");
             }
             return mensaje.toString();
         } else {
-            mensaje.append("\nNO EXISTE EL OBJETO.");
+            mensaje.append("\nNO EXISTE EL OBJETO.\n");
             return mensaje.toString();
         }
     }
@@ -127,7 +131,7 @@ public class ConsolaComandos {
             File[] files = directoryActual.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    return info(file);
+                    return "\n" + info(file);
                 }
             }
         }
@@ -140,7 +144,7 @@ public class ConsolaComandos {
         Calendar today = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        mensaje.append("Fecha Actual: " + dateFormat.format(today.getTime()));
+        mensaje.append("\nFecha Actual: " + dateFormat.format(today.getTime())+"\n");
         
         return mensaje.toString();
 
@@ -151,26 +155,26 @@ public class ConsolaComandos {
         Calendar today = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        mensaje.append("Fecha Actual: ").append(dateFormat.format(today.getTime()));
+        mensaje.append("\nFecha Actual: ").append(dateFormat.format(today.getTime())+"\n");
 
         return mensaje.toString();
     }
 
-    public String Escribir(String nombre, String contenido) {
+    public String wr(String nombre, String contenido) {
         StringBuilder mensaje = new StringBuilder();
         File fileToWrite = new File(directoryActual, nombre);
 
         try (FileWriter writer = new FileWriter(fileToWrite)) {
             writer.write(contenido);
-            mensaje.append("Contenido escrito en el archivo: ").append(fileToWrite.getAbsolutePath());
+            mensaje.append("\nContenido escrito en el archivo: ").append(fileToWrite.getAbsolutePath());
         } catch (IOException e) {
-            mensaje.append("Error al escribir en el archivo: ").append(e.getMessage());
+            mensaje.append("\nError al escribir en el archivo: ").append(e.getMessage());
         }
 
         return mensaje.toString();
     }
 
-    public String Leer(String nombre) {
+    public String rd(String nombre) {
         StringBuilder mensaje = new StringBuilder();
         File fileToRead = new File(directoryActual, nombre);
 
