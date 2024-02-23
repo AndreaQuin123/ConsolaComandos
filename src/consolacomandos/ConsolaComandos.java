@@ -100,6 +100,7 @@ public class ConsolaComandos {
             }
         } else {
             directoryActual = new File(directoryActual.getParent());
+            mensaje.append("Volviendo a carpeta anterior...\n");
             return mensaje.toString();
         }
     }

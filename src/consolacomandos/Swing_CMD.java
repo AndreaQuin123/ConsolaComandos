@@ -164,7 +164,7 @@ public class Swing_CMD extends javax.swing.JFrame {
                 }
 
                 if (comando.startsWith("rd")) {
-                    nombre = comando.substring(4).trim();
+                    nombre = comando.substring(2).trim();
                     Consola.append(mf.rd(nombre));
                 }
             }
