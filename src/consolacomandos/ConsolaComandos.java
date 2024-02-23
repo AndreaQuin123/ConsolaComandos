@@ -128,16 +128,19 @@ public class ConsolaComandos {
     }
 
     public String Dir() {
+
+        StringBuilder mensaje = new StringBuilder();
+
         if (directoryActual.isDirectory()) {
             File[] files = directoryActual.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    return "\n" + info(file);
+                    mensaje.append("\n").append(info(file));
                 }
             }
         }
         
-        return null;
+        return mensaje.toString();
     }
 
     public String Date() {
